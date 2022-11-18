@@ -16,7 +16,7 @@ css 宽度高度单位及其含义整理 css再巩固
 空对象({})与null不同,如何判断对象为{}空对象
 js日期、时间计算
 自定义迭代器,遍历对象键值
-参考DEMES系统可以学习的地方
+
 递归集中配置路由
 按需加载路由、按需加载组件
 动态路由和静态路由混合使用
@@ -29,21 +29,3 @@ webpack打包可视化插件 webpack-bundle-analyzer
 封装localhost的存取,axios封装,将取token的操作(或者请求的公共操作)放到拦截器内部
 位操作权限控制/分类控制
 promise resolve的使用(基本掌握), reject传递异步请求的error,如何使用?,reject和catch
-
-react中遇到
-{this.state.purviewSetVisible&&
-        <Modal
-        ref="setRole"
-        checkedPurviewList = {this.state.checkedPurviewList}
-        member = {this.state.currentMember} 
-        visible = {this.state.purviewSetVisible}
-        onCancel = {this.handleCancelPurviewSetting}
-        onCreate = {this.handleSetPurview}
-        ></Modal>}
-类似场景时的解决方案,visible更改与需要传给模态框的数据几乎同时进行时,该怎么保证,
-每次模态框弹出时与state相关的props都能传值正常(遇到过visible为true之后,其他传值失败的问题)
-react条件渲染(详解,本质)
-antd 表单Form的各种API
-
-react条件渲染的性能损耗比将条件判断植入组件render函数中的
-性能损耗还要大
