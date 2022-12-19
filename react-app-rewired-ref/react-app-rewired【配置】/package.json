@@ -1,0 +1,42 @@
+{
+  "name": "customize-cra-website",
+  "version": "1.0",
+  "author": "appleyk",
+  "license": "MIT",
+  "private": true,
+  "homepage": "./",
+  "dependencies": {
+    "antd": "3.22.0",
+    "axios": "^0.27.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.3",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.0"
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.13.5",
+    "customize-cra": "^1.0.0",
+    "less": "4.1.1",
+    "less-loader": "7.3.0",
+    "react-app-rewired": "^2.2.1"
+  },
+  "scripts": {
+    "start": "set PORT=3020 &  react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
