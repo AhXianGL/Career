@@ -145,3 +145,76 @@ arrowFoo.apply(scope)//'global scope'
 plainFoo()           //'global scope'
 plainFoo.apply(scope)//'scope'
 ```
+
+#### react + dva缓存 实践
+
+```javascript
+export default {
+    namespace: 'template',
+    state: {
+        templates: [],
+    },
+    reducers: {
+        setTemplate(state, action) {
+            let templates = [...state.templates]
+            // 时间戳用于控制缓存时间
+            let { requestTimeStamp, template } = action.payload
+            // 某一模板的缓存'过期', 更新缓存
+            let oldTemplateIndex = templates.findIndex(item => item.template.code === template.code)
+            if (oldTemplateIndex !== -1) {
+                // 更新模板缓存
+                templates.splice(oldTemplateIndex, 1,
+                    {
+                        requestTimeStamp: requestTimeStamp,
+                        template: template
+                    })
+            } else {
+                // 某一模板首次请求, 直接入栈作为缓存, 不需要'更新'
+                templates.push({
+                    requestTimeStamp: requestTimeStamp,
+                    template: template
+                })
+            }
+            return { ...state, templates: templates }
+        },
+    },
+    //dva中的 effect
+    effects: {
+        * queryMetaTemplateByCode(action, { call, put, select }) {
+            let categoryCode = action.payload.categoryCode
+            const templates = [...yield select(state => state.metadetail.templates)]
+            // 判断用户查询的元信息对应的模板是否有缓存, 如果有缓存则不再重复请求
+            let templateCache = templates.find(item => item.template.code === categoryCode)
+            /**元信息对应的模板是否有缓存 */
+            let isCached = (templates.length > 0) && (typeof templateCache !== 'undefined')
+            /**元信息对应的模板缓存是否超过有效期 */
+            let cacheOutDate = false
+            // 有缓存的同时判断缓存是否'过期', '过期'的标准由常量指定
+            if (isCached) {
+                let cacheTimeString = templateCache.requestTimeStamp
+                let timeDiff = moment().diff(cacheTimeString, 'seconds')
+                cacheOutDate = timeDiff > 5
+            }
+            /**模板有缓存且未过期, 则不查询模板 */
+            if (isCached && !cacheOutDate) return
+
+            const templateResponse = yield call(() => axiosFn.createAxios(axiosFn.getToken()).get(Url.templateGetUrl, { params: { category: categoryCode } }))
+            if (templateResponse.data.status === 200) {
+                // 记录请求的时间戳, 以备控制缓存的有效时间使用
+                let requestTimeStamp = templateResponse.data.timeStamp
+                let template = templateResponse.data.data
+                yield put({
+                    type: 'setTemplate',
+                    payload: {
+                        requestTimeStamp: requestTimeStamp,
+                        template: template,
+                    }
+                })
+            } else {
+                message.error(templateResponse.data.message)
+            }
+        },
+    }
+}
+
+```
