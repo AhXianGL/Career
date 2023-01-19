@@ -5,7 +5,14 @@
 <img src='./src/WrappingSpecificElementsOfFlexLayout.png'></img>
 
 ```css
+//父级flex包含块
+.flex-wrapper{
+    display:flex;
+    flex-wrap: wrap;
+}
+// @media screen 实现响应式
 @media screen and (max-width: 1900px) {
+    //需要响应式定位的子元素
     .second-flexitem-wrapper{
     display: flex;
     margin-top: 12px;
@@ -18,8 +25,7 @@
 
 > 原理:
 > 屏幕宽度小于一定值时,调整.filter-wrap弹性布局内flex item的顺序
-> 将筛选项宽度置为100%保证其换行,再将其order置为flex布局中所有元
-> 素的最后,保证其换到下一行
+> 将筛选项宽度置为100%保证其换行,再将其order置为flex布局中最后一个元素,保证其换到下一行
 
 #### debounce与throttle
 debounce与throttle的难点均不在其概念本身或者实现方式,而在于其涉及到的javascript underhood
@@ -33,7 +39,7 @@ debounce与throttle的难点均不在其概念本身或者实现方式,而在于
 其本质就是一个高阶函数,接收一个function参数,和一个timeOut参数,
 它返回一个包裹着定时器的'debounced version'函数,同时行形成一个closure,该closure由以下两个部分构成:
 1. 在closure中的`timer(定时器)`的reference
-2. 刷新/触发(首次执行被认为是'触发',在timeOut之内再次执行重置了定时器,所以被认为是'刷新')`timer(定时器)`的函数
+2. 刷新/启动(首次执行被认为是'启动定时器',在timeOut之内再次执行重置了定时器,所以被认为是'刷新定时器')`timer(定时器)`的函数
 
 从而实现了下述注释中的概念:
 ```js
