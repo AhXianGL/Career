@@ -58,3 +58,30 @@ convertGeometryCoordinatesToRectExtend = (geometry) => {
   let coordinates = geoJSON.coordinates[0]
   return convertCoordinatesToExtendCorner(coordinates)
 }
+
+/**递归, 按照原型链模式设计的 dataRef=>parentDataRef 将当前用户所在的节点映射为'路径'数组,用于生成面包屑 
+ * nodeData Example:
+ * {
+ *   parentDataRef: null,
+ *   id: 'root',
+ *   children:[
+ *     { 
+ *       id: 'childOne',
+ *       parentDataRef:{
+ *         parentDataRef: null,
+ *         id: 'root',
+ *       }
+ *       children: [...]
+ *      }
+ *   ]
+ *   
+ * }
+*/
+function mapCurrentDataTreeNodeToPathArray(nodeData, pathArray = []) {
+  if (!nodeData) {
+    return pathArray
+  }
+  mapCurrentDataTreeNodeToPathArray(nodeData.parentDataRef, pathArray)
+  pathArray.push(nodeData)
+  return pathArray
+}
