@@ -12,7 +12,7 @@ function getShapeOfArray(arr) {
   return arrayShapeRecursive(arr)
 }
 /**
-  * 
+  * convert the Geojson coordinates array to geometry extend corner lng lat Object
   * @param {Array} coordinates [[lng,lat],[lng,lat],...]
   * @returns {Object} extendCorner
   */
