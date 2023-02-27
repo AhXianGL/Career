@@ -30,3 +30,5 @@ axiosInstance/axios 前端API层的封装(axios封装)
 promise resolve的使用(基本掌握), reject传递异步请求的error,如何使用?,reject和catch
 flux架构到redux
 迭代器是用来干嘛的, 为什么redux的异步副作用用到了迭代器
+
+参考src目录 总结拖拽标准,以及卷帘业务实现逻辑
