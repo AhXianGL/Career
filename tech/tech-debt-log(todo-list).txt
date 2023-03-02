@@ -31,4 +31,10 @@ promise resolve的使用(基本掌握), reject传递异步请求的error,如何�
 flux架构到redux
 迭代器是用来干嘛的, 为什么redux的异步副作用用到了迭代器
 
-参考src目录 总结拖拽标准,以及卷帘业务实现逻辑
+参考
+https://html.spec.whatwg.org/multipage/dnd.html#drag-and-drop-processing-model
+ 总结拖拽标准,以及卷帘业务实现逻辑
+
+leaflet框架 同一个图层实例添加到不同的地图实例中, 对地图进行拖拽缩放等操作会异常, 多窗口预览实现过程中踩坑
+
+深究float,以及float与BFC的互相作用关系
