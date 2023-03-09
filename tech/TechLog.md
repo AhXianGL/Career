@@ -1,4 +1,4 @@
-// 非常 讨厌写笔记, 我做记录的根本原因是长期难以忍受互联网上的'无用信息', 发现自己思考也能解决很多问题并且更能触碰到问题的根源, 才决定自己做笔记, 这些记录或许只会在'初级阶段'有点作用,由于记录之前就是由自己实现,理解并频繁使用,写完基本就不会再看.
+// 非常 讨厌写笔记, 我做记录的根本原因是长期难以忍受互联网上的'无用信息',没脑子的只会他妈的抄抄抄,永远他妈的都是浅尝辄止, 发现自己思考也能解决很多问题并且更能触碰到问题的根源, 才决定自己做笔记, 这些记录或许只会在'初级阶段'有点作用,由于记录之前就是由自己实现,理解并频繁使用,写完基本就不会再看.
 #### 弹性布局中实现响应式特定元素换行
 
 如下述场景
@@ -14,8 +14,9 @@
 @media screen and (max-width: 1900px) {
     //需要响应式定位的子元素
     .second-flexitem-wrapper{
-    display: flex;
-    margin-top: 12px;
+    /* other style properties... */
+    /* ... ... */
+    /* flex wrap specific style properties */
     flex-basis: 100%;
     flex-wrap: nowrap;
     order: 3;
@@ -41,7 +42,7 @@ debounce与throttle的难点均不在其概念本身或者实现方式,而在于
 1. 在closure中的`timer(定时器)`的引用reference
 2. 刷新/启动(首次执行被认为是'启动定时器',在timeOut之内再次执行重置了定时器,所以被认为是'刷新定时器')`timer(定时器)`的函数
 
-从而实现了下述注释中的概念:
+从而实现了下述机制:
 ```js
   Fn = (a,b,c)=>{
     //...
@@ -49,8 +50,7 @@ debounce与throttle的难点均不在其概念本身或者实现方式,而在于
   debounced_Fn = Utils.debounce(Fn,timeBuffer);
   /*每一次调用 debounced_Fn,都在重置debounce(Fn,timeBuffer)
   所构造出的闭包(也是debounced_Fn所在的闭包)中的计时器(timer)*/
-  函数调用方式的转变: Fn(a,b,c) => debounced_Fn(a,b,c),非常的简洁和语义化,开发者只需要关注when
-  /where调用即可
+  函数调用方式的转变: Fn(a,b,c) => debounced_Fn(a,b,c),非常的简洁和语义化,开发者只需要关注when/where调用即可
 
   // this问题,已经由Fn函数的ArrowFunction声明(()=>{})自动传递,不需要bind
 ```
@@ -71,7 +71,7 @@ debounce与throttle的难点均不在其概念本身或者实现方式,而在于
 ```
 
 ###### 思考
-防抖的实现非常简单,唯一难点其实不在'防抖',而在
+防抖的实现非常简单,难点其实不在'防抖',而在
 1. 闭包(定时器的更新)
 2. 'this'
 3. setTimeout回调函数的this问题
@@ -129,13 +129,18 @@ let ssx = new Me({
 let debouncedSpeak = debounce(ssx.speak,1000)
 let debounced_Speak = debounce(ssx._speak,1000)
 // console ssx
-debouncedSpeak('outer defined debounced speak')
+debouncedSpeak('outer defined debounced speak') // 1
 // console window
-debounced_Speak('outer defined debounced _speak')
+debounced_Speak('outer defined debounced _speak') // 2
+// 1和2的不同说明了箭头式的函数声明 函数内部的this由声明时的"词法作用域"决定
+
 // console ssx
-ssx.debouncedSpeakInMe('inner defined debounced Speak')
+ssx.debouncedSpeakInMe('inner defined debounced Speak') // 3
 // console ssx
-ssx.debounced_SpeakInMe('inner defined debounced _Speak')
+ssx.debounced_SpeakInMe('inner defined debounced _Speak') // 4
+/* 3和4相同说明了传统方式声明的函数(debouce函数返回的函数)的this取决于其调用方式,
+谁调用它this就指向谁 */
+
 ```
 
 ##### 2.throttle
@@ -159,7 +164,7 @@ plainFoo()           //'global scope'
 plainFoo.apply(scope)//'fooScope'
 ```
 
-#### react + dva缓存 实践
+#### react + dva 前端缓存实践
 
 ```javascript
 export default {
