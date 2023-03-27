@@ -32,18 +32,55 @@ JS Conf react 创始人所讲的react思想
 
 回归到副作用代码的编写: 在RCC中,开发者想要将React的state变动与其副作用同步时,就简单的在每次setState之后执行相关的副作用。副作用这一函数式编程概念没有在编写逻辑的时候直接暴露给开发者,需要开发者自己去手动的将'副作用'的操作与setState这一改变视图状态的操作进行同步。随着web应用设计开发过程中不断升级,前端组件的组合结构日渐复杂,一个组件将持有非常多的状态,每次对状态的变动都会牵扯到副作用的同步(业务逻辑代码的编写),编写这些代码的时候可能很流畅,但是后期维护迭代的时候就会惊讶的发现:"为什么这个逻辑的代码到处都是!",你或许会想出一个好点子:"我把这些逻辑代码封装一下呀,每个setState的地方粘贴一下就好了",OK,在这个时候你便会恍然大悟,"我自己将副作用作为一个个完整的模块,从此state的变化就是state的变化,副作用就是副作用,再也不用刻意的将setState与逻辑代码揉在一起写了",所以一个个隐式的useEffect诞生了。
 
-TODO
-参考JS Conf react 创始人所讲的react思想,React函数式组件设计之初是为了解决什么问题呢或者实现了什么样的设计思想?
-如今React类组件面对的问题是什么呢?
+那么我们可以发现状态变动有其对应的副作用,RFC的useEffect直接将状态变动相关联的副作用以显式的代码组织方式帮助用户将状态改变与副作用的分离,让开发者编写代码的时候,不用一边思考状态变化一边思考如何同步副作用,用户可以在写逻辑代码的时候专心逻辑不去考虑副作用与状态的同步,在useEffect的hook中去与专心编写副作用。
 
-那么我们可以发现状态变动有其对应的副作用,RFC的useEffect直接将状态变动相关联的副作用以响应式的显式的代码组织方式帮助用户强化状态与副作用的分离,让开发者编写代码的时候,不用一边思考状态变化一边思考如何同步副作用,用户可以在写逻辑代码的时候专心逻辑不去考虑副作用与状态的同步,在useEffect的hook中去与专心编写副作用。
-
-行文至此,我发现我需要将RFC VS RCC的文章标题改为RFC Hooks' work,也不是 我发现我的关注点错了,我的关注点不应该是为什么要发明RFC,我的关注点应该是RFC与RCC给开发者带来怎么样不同的体验和机制,至于为什么发明,那是另一个专题,我可以去追踪React小组的信息来解决这个问题
+行文至此,我发现我需要将RFC VS RCC的文章标题改为RFC Hooks ,也不是 我发现我的关注点错了,我的关注点不应该是为什么要发明RFC,我的关注点应该是RFC与RCC给开发者带来怎么样不同的体验和机制,至于为什么发明,那是另一个专题,我可以去追踪React小组的信息来解决这个问题
 
 ```js
-useEffect(()=>{
-   //do the effect when the xxxState change
-},[xxxState])
+function RFC(){
+   const [state,setState]=useState();
+   useEffect(()=>{
+      //do the effect when the stateA change
+   get(state).then()
+   },[state]);
+   function handleB1Click(){
+      setState(1)
+      //get(1).then(...)
+   }
+   function handleB1Click(){
+      setState(2)
+      //get(2).then(...)
+   }
+   function handleB1Click(){
+      setState(3)
+      //get(3).then(...)
+   }
+   return {
+      <>
+      <Button onClick={handleB1Click}>button1</Button>
+      <Button onClick={handleB2Click}>button2</Button>
+      <Button onClick={handleB3Click}>button3</Button>
+      </>
+   }
+}
+
+```
+
+```js
+this.setState({
+ AState: xxx,
+ BState: xxx,
+ CState: xxx,
+},()=>{
+   if(condition){
+      // do some sideEffect
+   }
+})
 ```
 
 帮助开发者做到了状态改变和状态关联的副作用的关注点分离,将'数据驱动'的机制发挥的更彻底,不仅数据驱动了视图,数据的变动还驱动了行为(状态变动驱动副作用)
+
+
+TODO
+参考JS Conf react 创始人所讲的react思想,React函数式组件设计之初是为了解决什么问题呢或者实现了什么样的设计思想?
+如今React类组件面对的问题是什么呢?
