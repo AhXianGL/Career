@@ -85,3 +85,35 @@ function mapCurrentDataTreeNodeToPathArray(nodeData, pathArray = []) {
   pathArray.push(nodeData)
   return pathArray
 }
+
+/**
+ * convert the bit size to a number with proper Unit
+ */
+function mapPowerToUnit(power) {
+  let result = 0;
+  switch (power) {
+    case 1:
+      result = 'KB';
+      break;
+    case 2:
+      result = 'MB';
+      break;
+    case 3:
+      result = 'GB';
+      break;
+    case 4:
+      result = 'T';
+      break
+    default:
+      break;
+  }
+  return result
+}
+function calculateSpace(Byte, n = 0) {
+  let temp = Byte
+  while (temp > 1024) {
+    n++
+    temp = temp / 1024
+  }
+  return `${temp.toFixed(2)}${mapPowerToUnit(n)}`
+}
