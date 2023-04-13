@@ -38,3 +38,7 @@ https://html.spec.whatwg.org/multipage/dnd.html#drag-and-drop-processing-model
 leaflet框架 同一个图层实例添加到不同的地图实例中, 对地图进行拖拽缩放等操作会异常, 多窗口预览实现过程中踩坑
 
 深究float,以及float与BFC的互相作用关系
+
+user trigger several long-time request followed by 'setSomeState',
+when the latter request is faster than the perceding request, how to cancel
+the preceding 'setSomeState'
