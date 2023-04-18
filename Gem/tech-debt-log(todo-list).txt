@@ -42,3 +42,8 @@ leaflet框架 同一个图层实例添加到不同的地图实例中, 对地图�
 user trigger several long-time request followed by 'setSomeState',
 when the latter request is faster than the perceding request, how to cancel
 the preceding 'setSomeState'
+
+总结redux历史
+why we need redux-saga
+
+css兼容问题的解决方案(webpack打包的角度)
