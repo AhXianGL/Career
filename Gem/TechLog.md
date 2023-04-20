@@ -236,3 +236,138 @@ export default {
 }
 
 ```
+
+#### null and undefined
+
+JavaScript has two “nonvalues” that indicate missing information, undefined and null:
+JavaScript 有两种表示缺损信息的"空值",'undefined'和'null'
+* **undefined** means “no value” (neither primitive nor object). Uninitialized variables, missing parameters, and missing properties have that nonvalue. And functions implicitly return it if nothing has been explicitly returned.
+* **undefined** 表示"无值"(既不是原始数据类型,也不是对象)。未初始化的变量,缺损的参数,缺损的属性都用undefined表示。如果一个函数没有显示地指定返回值,那么将隐式地返回undefined。
+* **null** means “no object.” It is used as a nonvalue where an object is expected (as a parameter, as a member in a chain of objects, etc.).
+undefined and null are the only values for which any kind of property access results in an exception:
+
+> function returnFoo(x) { return x.foo }
+
+> returnFoo(true)
+undefined
+> returnFoo(0)
+undefined
+
+> returnFoo(null)
+TypeError: Cannot read property 'foo' of null
+> returnFoo(undefined)
+TypeError: Cannot read property 'foo' of undefined
+undefined is also sometimes used as more of a metavalue that indicates nonexistence. In contrast, null indicates emptiness. For example, a JSON node visitor (see Transforming Data via Node Visitors) returns:
+
+undefined to remove an object property or array element
+null to set the property or element to null
+Occurrences of undefined and null
+Here we review the various scenarios where undefined and null occur.
+
+Occurrences of undefined
+Uninitialized variables are undefined:
+
+> var foo;
+> foo
+undefined
+Missing parameters are undefined:
+
+> function f(x) { return x }
+> f()
+undefined
+If you read a nonexistent property, you get undefined:
+
+> var obj = {}; // empty object
+> obj.foo
+undefined
+And functions implicitly return undefined if nothing has been explicitly returned:
+
+> function f() {}
+> f()
+undefined
+
+> function g() { return; }
+> g()
+undefined
+Occurrences of null
+null is the last element in the prototype chain (a chain of objects; see Layer 2: The Prototype Relationship Between Objects):
+
+> Object.getPrototypeOf(Object.prototype)
+null
+null is returned by RegExp.prototype.exec() if there was no match for the regular expression in the string:
+
+> /x/.exec('aaa')
+null
+Checking for undefined or null
+In the following sections we review how to check for undefined and null individually, or to check if either exists.
+
+Checking for null
+You check for null via strict equality:
+
+if (x === null) ...
+Checking for undefined
+Strict equality (===) is the canonical way of checking for undefined:
+
+if (x === undefined) ...
+You can also check for undefined via the typeof operator (typeof: Categorizing Primitives), but you should normally use the aforementioned approach.
+
+Checking for either undefined or null
+Most functions allow you to indicate a missing value via either undefined or null. One way of checking for both of them is via an explicit comparison:
+
+// Does x have a value?
+if (x !== undefined && x !== null) {
+    ...
+}
+// Is x a non-value?
+if (x === undefined || x === null) {
+    ...
+}
+Another way is to exploit the fact that both undefined and null are considered false (see Truthy and Falsy Values):
+
+// Does x have a value (is it truthy)?
+if (x) {
+    ...
+}
+// Is x falsy?
+if (!x) {
+    ...
+}
+WARNING
+false, 0, NaN, and '' are also considered false.
+
+The History of undefined and null
+A single nonvalue could play the roles of both undefined and null. Why does JavaScript have two such values? The reason is historical.
+
+JavaScript adopted Java’s approach of partitioning values into primitives and objects. It also used Java’s value for “not an object,” null. Following the precedent set by C (but not Java), null becomes 0 if coerced to a number:
+
+> Number(null)
+0
+> 5 + null
+5
+Remember that the first version of JavaScript did not have exception handling. Therefore, exceptional cases such as uninitialized variables and missing properties had to be indicated via a value. null would have been a good choice, but Brendan Eich wanted to avoid two things at the time:
+
+The value shouldn’t have the connotation of a reference, because it was about more than just objects.
+The value shouldn’t coerce to 0, because that makes errors harder to spot.
+As a result, Eich added undefined as an additional nonvalue to the language. It coerces to NaN:
+
+> Number(undefined)
+NaN
+> 5 + undefined
+NaN
+Changing undefined
+undefined is a property of the global object (and thus a global variable; see The Global Object). Under ECMAScript 3, you had to take precautions when reading undefined, because it was easy to accidentally change its value. Under ECMAScript 5, that is not necessary, because undefined is read-only.
+
+To protect against a changed undefined, two techniques were popular (they are still relevant for older JavaScript engines):
+
+Technique 1
+Shadow the global undefined (which may have the wrong value):
+
+(function (undefined) {
+    if (x === undefined) ...  // safe now
+}());  // don’t hand in a parameter
+In the preceding code, undefined is guaranteed to have the right value, because it is a parameter whose value has not been provided by the function call.
+
+Technique 2
+Compare with void 0, which is always (the correct) undefined (see The void Operator):
+
+if (x === void 0)  // always safe
