@@ -1,4 +1,4 @@
-# RFC vs RCC(React Function Component VS React Class Component)
+# `!尚未完成!`RFC vs RCC(React Function Component VS React Class Component) 
 
 > 函数式组件与类组件究竟哪里不同? 函数式组件的出现帮助开发者解决了什么问题?
 > 这是我从入职前端开始用react,查看React文档后看到了RFC RCC两种组件的写法就思考的问题,

@@ -242,10 +242,10 @@ export default {
 JavaScript has two “nonvalues” that indicate missing information, undefined and null:
 JavaScript 有两种表示缺损信息的"空值",'undefined'和'null'
 * **undefined** means “no value” (neither primitive nor object). Uninitialized variables, missing parameters, and missing properties have that nonvalue. And functions implicitly return it if nothing has been explicitly returned.
-* **undefined** 表示"无值"(既不是原始数据类型,也不是对象)。未初始化的变量,缺损的参数,缺损的属性都用undefined表示。如果一个函数没有显示地指定返回值,那么将隐式地返回undefined。
+* **undefined** 表示"空`值`"(既不是原始数据类型,也不是对象)。未初始化的变量,缺损的参数,缺损的属性都用undefined表示。如果一个函数没有显示地指定返回值,那么将隐式地返回undefined。
 * **null** means “no object.” It is used as a nonvalue where an object is expected (as a parameter, as a member in a chain of objects, etc.).
 undefined and null are the only values for which any kind of property access results in an exception:
-
+* **null** 表示"空`对象`",用于表示值为"对象"类型的变量的空值
 > function returnFoo(x) { return x.foo }
 
 > returnFoo(true)
