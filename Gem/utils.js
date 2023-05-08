@@ -52,7 +52,7 @@ function convertCoordinatesToExtendCorner(coordinates) {
    * @param {String} geometry 
    * @returns {Object} extendCorner
    */
-convertGeometryCoordinatesToRectExtend = (geometry) => {
+const convertGeometryCoordinatesToRectExtend = (geometry) => {
   let geoJSON = JSON.parse(geometry)
   /*后端geometry的格式目前是三维数组,可能是为了multipolygon而设计的, 本工具函数只考虑单要素, 所以给数组降维 */
   let coordinates = geoJSON.coordinates[0]
@@ -117,3 +117,9 @@ function calculateSpace(Byte, n = 0) {
   }
   return `${temp.toFixed(2)}${mapPowerToUnit(n)}`
 }
+// 使用该补丁后,可以使用[-1]来提取数组最后一个元素
+Object.defineProperty(Array.prototype, -1, {
+  get: function () {
+    return Array.prototype.slice.call(this, -1)[0]
+  }
+})

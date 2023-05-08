@@ -40,3 +40,11 @@ flex-item 的flex-basis属性也可以生效但是无法达到flex容器高度�
 下方的dom的效果
 
 css换行的'css逻辑'
+
+async await语法糖+ try catch对错误的捕捉与promise的onReject和promise.catch对错误的捕捉有什么不同
+
+Promise.all([promiseList]).then((responseList)=>{
+  ...
+})中promiseList的索引顺序是否与responseList的索引顺序一致
+
+css in JS 和react组件中style属性 实现标签样式的赋值有什么不同
