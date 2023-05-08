@@ -371,3 +371,50 @@ Technique 2
 Compare with void 0, which is always (the correct) undefined (see The void Operator):
 
 if (x === void 0)  // always safe
+
+#### promise,thenable,setTimeout,callback,function,event loop ...
+
+```javascript
+let promise1 = ()=>new Promise((resolve,reject)=>{
+    console.log('promise1 running')
+    setTimeout(()=>{console.log('setTimeOut in promise1')})
+    resolve('promise1 resolved')
+});
+let promise2 = ()=>new Promise((resolve,reject)=>{
+    console.log('promise2 running')
+    setTimeout(()=>{console.log('setTimeOut in promise2')})
+    resolve('promise2 resolved')
+});
+const CallBack = ()=>{
+    console.log('callBack Run')
+    return 'callBack Finished'
+}
+function main(CallBack){
+    console.log('1');
+    console.log(CallBack())
+    setTimeout(()=>{
+        console.log('setTimeOut1 CallBack');
+    });
+    setTimeout(()=>{
+        console.log('setTimeOut2 CallBack');
+    });
+    console.log('before promise1')
+    promise1().then(res=>{
+        console.log(res)
+        setTimeout(()=>{
+        console.log('setTimeOut3 CallBack');
+        });
+    });
+    console.log('after promise1')
+    console.log('before promise2')
+    promise2().then(res=>{
+        console.log(res)
+        setTimeout(()=>{
+        console.log('setTimeOut4 CallBack');
+        });
+    });
+    console.log('after promise2')
+    return 'main function finished and poped out from stack'
+}
+main(CallBack)
+```
