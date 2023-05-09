@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/main.5a480809.css","mappings":"AAAA,KACE,iBACF,CCFA,UACI,aAEA,eADA,4BACA","sources":["App.css","pages/index.scss"],"sourcesContent":[".App {\n  text-align: center;\n}",".navigate{\r\n    display: flex;\r\n    justify-content: space-evenly; // 平分width\r\n    font-size: 25px;\r\n}"],"names":[],"sourceRoot":""}

@@ -1,4 +1,4 @@
-// 非常 讨厌写笔记, 我做记录的根本原因是长期难以忍受互联网上的'无用信息',没脑子的只会他妈的抄抄抄,永远他妈的都是浅尝辄止, 发现自己思考也能解决很多问题并且更能触碰到问题的根源, 才决定自己做笔记, 这些记录或许只会在'初级阶段'有点作用,由于记录之前就是由自己实现,理解并频繁使用,写完基本就不会再看.
+非常 讨厌写笔记, 我做记录的根本原因是长期难以忍受互联网上的'无用信息',没脑子的只会他妈的抄抄抄,永远他妈的都是浅尝辄止, 发现自己思考也能解决很多问题并且更能触碰到问题的根源, 才决定自己做笔记, 这些记录或许只会在'初级阶段'有点作用.
 #### 弹性布局中实现响应式特定元素换行
 
 如下述场景
@@ -239,6 +239,9 @@ export default {
 
 #### null and undefined
 
+the most "safe" way of null/undefined check:
+const condition = (item)=>(item === void 0 || item === null)
+
 JavaScript has two “nonvalues” that indicate missing information, undefined and null:
 JavaScript 有两种表示缺损信息的"空值",'undefined'和'null'
 * **undefined** means “no value” (neither primitive nor object). Uninitialized variables, missing parameters, and missing properties have that nonvalue. And functions implicitly return it if nothing has been explicitly returned.
@@ -418,3 +421,7 @@ function main(CallBack){
 }
 main(CallBack)
 ```
+
+#### typescript handbook nice sentences
+
+>**Remember, generics are all about relating two or more values with the same type!** from typescript doc -> handbook -> More On Functions -> Constraints
