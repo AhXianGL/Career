@@ -380,19 +380,31 @@ if (x === void 0)  // always safe
 ```javascript
 let promise1 = ()=>new Promise((resolve,reject)=>{
     console.log('promise1 running')
-    setTimeout(()=>{console.log('setTimeOut in promise1')})
+    setTimeout(()=>{
+        console.log('setTimeOut in promise1')
+        resolve('promise1 resolved')
+    },1000)//可以尝试改变这里的时间参数来探究Task先进先出的'队列'特性
+    for (let index = 0; index < 100; index++) {
+            queueMicrotask(()=>{console.log('microTask')})
+    }
     resolve('promise1 resolved')
 });
 let promise2 = ()=>new Promise((resolve,reject)=>{
     console.log('promise2 running')
-    setTimeout(()=>{console.log('setTimeOut in promise2')})
     resolve('promise2 resolved')
+    setTimeout(()=>{
+        console.log('setTimeOut in promise2')
+        resolve('promise2 resolved')
+    },1000)//可以尝试改变这里的时间参数来探究Task先进先出的'队列'特性
 });
 const CallBack = ()=>{
     console.log('callBack Run')
     return 'callBack Finished'
 }
 function main(CallBack){
+    for (let index = 0; index < 100; index++) {
+            queueMicrotask(()=>{console.log('microTask')})
+    }
     console.log('1');
     console.log(CallBack())
     setTimeout(()=>{
@@ -403,6 +415,9 @@ function main(CallBack){
     });
     console.log('before promise1')
     promise1().then(res=>{
+        for (let index = 0; index < 100; index++) {
+            queueMicrotask(()=>{console.log('microTask')})
+        }
         console.log(res)
         setTimeout(()=>{
         console.log('setTimeOut3 CallBack');
@@ -419,7 +434,7 @@ function main(CallBack){
     console.log('after promise2')
     return 'main function finished and poped out from stack'
 }
-main(CallBack)
+console.log(main(CallBack))
 ```
 
 #### typescript handbook nice sentences
