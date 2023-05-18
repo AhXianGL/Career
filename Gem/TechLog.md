@@ -381,20 +381,21 @@ if (x === void 0)  // always safe
 let promise1 = ()=>new Promise((resolve,reject)=>{
     console.log('promise1 running')
     setTimeout(()=>{
-        console.log('setTimeOut in promise1')
-        resolve('promise1 resolved')
+        console.log('task in promise1')
     },1000)//可以尝试改变这里的时间参数来探究Task先进先出的'队列'特性
     for (let index = 0; index < 100; index++) {
-            queueMicrotask(()=>{console.log('microTask')})
+        queueMicrotask(()=>{console.log('second microTask group')})
     }
     resolve('promise1 resolved')
 });
 let promise2 = ()=>new Promise((resolve,reject)=>{
     console.log('promise2 running')
     resolve('promise2 resolved')
+    for (let index = 0; index < 100; index++) {
+        queueMicrotask(()=>{console.log('third microTask group')})
+    }
     setTimeout(()=>{
-        console.log('setTimeOut in promise2')
-        resolve('promise2 resolved')
+        console.log('task in promise2')
     },1000)//可以尝试改变这里的时间参数来探究Task先进先出的'队列'特性
 });
 const CallBack = ()=>{
@@ -403,24 +404,30 @@ const CallBack = ()=>{
 }
 function main(CallBack){
     for (let index = 0; index < 100; index++) {
-            queueMicrotask(()=>{console.log('microTask')})
+            queueMicrotask(()=>{console.log('first microTask group')})
     }
-    console.log('1');
+    console.log('main function start running');
     console.log(CallBack())
     setTimeout(()=>{
-        console.log('setTimeOut1 CallBack');
+        for (let index = 0; index < 100; index++) {
+            queueMicrotask(()=>{console.log(' microTask group in Task1')})
+        }
+        console.log('Task1 Finished');
     });
     setTimeout(()=>{
-        console.log('setTimeOut2 CallBack');
+        console.log('Task2 Finished');
     });
     console.log('before promise1')
     promise1().then(res=>{
         for (let index = 0; index < 100; index++) {
-            queueMicrotask(()=>{console.log('microTask')})
+            queueMicrotask(()=>{console.log('promise1 then microTask group')})
         }
         console.log(res)
         setTimeout(()=>{
         console.log('setTimeOut3 CallBack');
+        for (let index = 0; index < 100; index++) {
+            queueMicrotask(()=>{console.log(' microTask group in Task2')})
+        }
         });
     });
     console.log('after promise1')
@@ -434,9 +441,26 @@ function main(CallBack){
     console.log('after promise2')
     return 'main function finished and poped out from stack'
 }
+function function2(params) {
+    return console.log('function2 finished')
+}
 console.log(main(CallBack))
+function2()
 ```
 
 #### typescript handbook nice sentences
 
 >**Remember, generics are all about relating two or more values with the same type!** from typescript doc -> handbook -> More On Functions -> Constraints
+
+#### make a immediately invoked setInterval
+
+add patch to the window.setInterval fullfilling invoking callback when interval set up
+```js
+(function patchSetInterval (){
+    const oldSetInterval = window.setInterval;
+    window.setInterval = (callBack,timeRange)=>{
+        callBack();
+        return oldSetInterval.call(null,callBack,timeRange);
+    }
+})();
+```
