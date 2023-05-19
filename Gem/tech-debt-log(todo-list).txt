@@ -56,3 +56,5 @@ leaflet geojson layer bug - remove all moveEnd event and then add geojson layer
 the overlap layer panel visible area wont change when user move map
 
 why Function.prototype.call and Function.prototype.apply exist at the same time
+
+e.parentNode and e.parentElement
