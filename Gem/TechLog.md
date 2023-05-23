@@ -464,3 +464,5 @@ add patch to the window.setInterval fullfilling invoking callback when interval 
     }
 })();
 ```
+
+uri in get request
