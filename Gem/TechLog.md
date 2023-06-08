@@ -471,5 +471,5 @@ add patch to the window.setInterval fullfilling invoking callback when interval 
 })();
 ```
 
-#### uri(path) in get request
+uri-like params in get request search params
 
