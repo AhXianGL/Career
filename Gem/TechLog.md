@@ -239,71 +239,77 @@ export default {
 
 #### null and undefined
 
-the most "safe" way of null/undefined check:
+最靠谱的 null/undefined 空值检查:
 const condition = (item)=>(item === void 0 || item === null)
 
-JavaScript has two “nonvalues” that indicate missing information, undefined and null:
 JavaScript 有两种表示缺损信息的"空值",'undefined'和'null'
-* **undefined** means “no value” (neither primitive nor object). Uninitialized variables, missing parameters, and missing properties have that nonvalue. And functions implicitly return it if nothing has been explicitly returned.
-* **undefined** 表示"空`值`"(既不是原始数据类型,也不是对象)。未初始化的变量,缺损的参数,缺损的属性都用undefined表示。如果一个函数没有显示地指定返回值,那么将隐式地返回undefined。
-* **null** means “no object.” It is used as a nonvalue where an object is expected (as a parameter, as a member in a chain of objects, etc.).
-undefined and null are the only values for which any kind of property access results in an exception:
+* **undefined** 表示"空`值`"(既不是原始数据类型,也不是对象)。未初始化的变量,缺损的参数,缺损的属性都用被undefined所表示。如果一个函数没有显示地指定返回值,那么也将隐式地返回undefined。
 * **null** 表示"空`对象`",用于表示值为"对象"类型的变量的空值
-> function returnFoo(x) { return x.foo }
-
-> returnFoo(true)
+* undefined、null 是仅有的两个访问其属性将会抛出异常的值.
+***javascript
+function returnFoo(x) { return x.foo }
+returnFoo(true)
 undefined
-> returnFoo(0)
+returnFoo(0)
 undefined
-
-> returnFoo(null)
+returnFoo(null)
 TypeError: Cannot read property 'foo' of null
-> returnFoo(undefined)
+returnFoo(undefined)
 TypeError: Cannot read property 'foo' of undefined
-undefined is also sometimes used as more of a metavalue that indicates nonexistence. In contrast, null indicates emptiness. For example, a JSON node visitor (see Transforming Data via Node Visitors) returns:
+***
 
-undefined to remove an object property or array element
-null to set the property or element to null
-Occurrences of undefined and null
-Here we review the various scenarios where undefined and null occur.
+undefined 通常用于表示"不存在"的含义. 相对而言, null 用来表示"空"的含义.
+这一点体现在JSON.stringify和JSON.parse函数所接受的节点处理器上.
+***javascript
+function nodeVisitor(key,value){
+    // ... ...some pre/post process code
+    if('name' === key) return null;
+    if('child' === key) return undefined;
+    return value; //means keep the value as it is
+}
+let obj = {
+    name:'obj',
+    prop:{
+        child:'child',
+    }
+};
+let str = JSON.stringify(obj, nodeVisitor);
+// str: '{"name":null,"prop":{}}'
+***
+可见JSON转换器函数的返回值为undefined时 有移除某个属性的作用(即表示"不存在"这个含义)
+返回值为null 则将某个属性设为null(即表示"空"的含义),这一机制在前端构造某个接口所需参数之前对数据进行预处理很有用,可以在批量赋值之后剔除某些后端不需要的参数,或者指定某些参数为null。
 
-Occurrences of undefined
-Uninitialized variables are undefined:
-
+大概枚举一下除用户自己制定之外,undefined 和 null 出现的场景
+* undefined
+1. 未初始化的变量
 > var foo;
 > foo
 undefined
-Missing parameters are undefined:
-
+2. 未传递的参数
 > function f(x) { return x }
 > f()
 undefined
-If you read a nonexistent property, you get undefined:
-
+3. 读取不存在的属性
 > var obj = {}; // empty object
 > obj.foo
 undefined
-And functions implicitly return undefined if nothing has been explicitly returned:
-
+4. 函数隐式返回
 > function f() {}
 > f()
 undefined
-
 > function g() { return; }
 > g()
 undefined
-Occurrences of null
-null is the last element in the prototype chain (a chain of objects; see Layer 2: The Prototype Relationship Between Objects):
 
+* null
+1. 原型链的最顶层元素
 > Object.getPrototypeOf(Object.prototype)
 null
-null is returned by RegExp.prototype.exec() if there was no match for the regular expression in the string:
-
+2. 正则表达式的 exec()方法无匹配项
 > /x/.exec('aaa')
 null
-Checking for undefined or null
-In the following sections we review how to check for undefined and null individually, or to check if either exists.
 
+一般使用下述方法来对null和undefined做检测
 Checking for null
 You check for null via strict equality:
 
@@ -465,6 +471,5 @@ add patch to the window.setInterval fullfilling invoking callback when interval 
 })();
 ```
 
-uri in get request
+#### uri(path) in get request
 
-history of the function eval in javascript(lose reference of eval when indirectly invoke the eval function-- interesting)
