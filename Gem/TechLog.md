@@ -465,6 +465,6 @@ add patch to the window.setInterval fullfilling invoking callback when interval 
 })();
 ```
 
-uri in get request
+uri-like params in get request search params
 
 history of the function eval in javascript(lose reference of eval when indirectly invoke the eval function-- interesting)
