@@ -466,5 +466,9 @@ add patch to the window.setInterval fullfilling invoking callback when interval 
 ```
 
 uri-like params in get request search params
-
+axiosFn.createTokenAxios().get(rootUrl + `/assets/preview/file/extent`, {
+        params: {
+          path: btoa(encodeURIComponent(path))
+        }
+      })
 history of the function eval in javascript(lose reference of eval when indirectly invoke the eval function-- interesting)
