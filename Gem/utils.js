@@ -123,3 +123,31 @@ Object.defineProperty(Array.prototype, -1, {
     return Array.prototype.slice.call(this, -1)[0]
   }
 })
+
+/**删去sources 与 target属性的交集 */
+function _substract(target, ...sources){
+  for (const source of sources) {
+      for( let key in source){
+          if(key in target){
+              delete target[key];
+          }
+      }
+  }
+  return target;
+}
+let a1 = {name: 'a'};
+let b1 = {name: 'b', prop:'do something'};
+let c1 = _substract(a1,b1);
+console.log(c1);
+/**使用sources对象仅复写target中存在的属性 */
+function _override(target,...sources){
+  for (const source of sources) {
+      for (const key in source) {
+          console.log(key, target)
+          if(key in target){
+              target[key] = source[key];
+          }
+      }
+  }
+  return target;
+}
