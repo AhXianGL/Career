@@ -479,3 +479,49 @@ axiosFn.createTokenAxios().get(rootUrl + `/assets/preview/file/extent`, {
       })
 
 history of the function eval in javascript(lose reference of this when indirectly invoke the eval function-- interesting)
+
+### 实现前端定时请求改变UI的需求, 我更倾向于使用递归调用setTimeOut的方法而不是简单的setInterVal
+#### 概述
+**本问题的场景: 没有条件使用websocket协议进行前后端通信, 需要前端自己定时请求来刷新一些多用户共享的一些数据或是一些动态变化的数据。**
+
+递归调用setTimeOut可以解决setInterVal回调函数中的请求不稳定造成的问题
+```JS
+// 举例: 
+setInterVal(
+  someRequest.then(res=>{
+    do(res);
+  }), 1000);
+
+// ticker1: someRequest花了三秒
+// ticker2: someRequest花了一秒
+// ticker3: someRequest瞬时响应
+// tickerN: ... ...
+setInterval只能保证发起请求这个行为是等时间间隔的, 并不能保证请求成功响应后的所作的额外操作是等时间间隔的,这会导致不易察觉的bug: ticker1对 UI/数据 的修改很可能会覆盖掉ticker2对 UI/数据 的修改, 这不符合我们的期望。
+我们重新思考需要解决的问题: 我们想定时循环调用一个函数, 并且需要保证其在时间序列上的先后顺序, 前后帧触发的函数的作用不可以互相干扰。
+将这个问题拆成两个问题:
+问题1: 函数调用的顺序必须是类似队列一样, 在时间线的维度上是有序的。
+问题2: 函数的执行间隔是像定时器一样, 在时间线的维度上是等间隔的。
+因为浏览器视角下, 对请求的响应时间是不知道的, 所以我们其实解决不了问题2, 我们只能解决问题1,想要保证ajax类型的函数及其回调函数 这一"操作整体" 是按照时间顺序一次一次执行的, 定时器是行不通的, 那么什么方法可以用来保证函数调用的先后顺序呢?
+就是setTimeOut, 我们可以使用递归调用setTimeOut的方式, 在当前帧操作完成之后再定时发起下一帧操作。这样就巧妙地解决了问题1。
+
+//实现方法: 
+let timer = null // 用于防止内存泄漏
+function initialization(params){
+  timer = setTimeOut(()=>{
+    someRequest.then(
+      res=>{
+        initialization(parms)
+      }
+    )
+  },1000)
+}
+递归调用setTimeOut可以保证副作用的执行具有严格的时间先后顺序,不受网络波动的影响,实现了真正的副作用的定时器,而不仅是请求的定时器
+
+其中一个核心的逻辑就是: 定时的请求!==定时响应,可能1s发送一次请求,但是不同帧(一次定时器的执行)发送出去的请求的响应, 并不一定就在下一帧到来之前回来, 因为同一个请求在不同帧的速度可能不同, 这种偶发的响应速度差异会导致请求的then函数的频率与定时器发生频率不一致。
+```
+#### 常见问题
+
+1. 为啥递归调用setTimeOut不会造成js栈溢出呢?
+因为setTimeOut回调函数不用栈存储,是事件机制队列控制的
+2. 内存泄漏的问题
+我们使用一个变量来存放timer,在每一帧给timer附上新的定时器, 
