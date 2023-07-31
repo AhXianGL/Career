@@ -525,3 +525,73 @@ function initialization(params){
 因为setTimeOut回调函数不用栈存储,是事件机制队列控制的
 2. 内存泄漏的问题
 我们使用一个变量来存放timer,在每一帧给timer附上新的定时器, 
+
+### 前端下载文件
+
+```javascript
+let starTimeString = this.state.timeRange[0]
+let endTimeString = this.state.timeRange[1]
+if (!starTimeString || !endTimeString) {
+    message.error('开始时间、结束时间不能为空')
+} else {
+    starTimeString = starTimeString.format('YYYY-MM-DD')
+    endTimeString = endTimeString.format('YYYY-MM-DD')
+}
+axiosFn.createAxios(axiosFn.getToken()).get(dataUrl + '/order/excel/export', {
+    params: {
+        fromTime: starTimeString,
+        toTime: endTimeString
+    },
+    responseType: 'blob'
+}).then(res => {
+    let blob = new Blob([res.data], {
+        type: "application/vnd.ms-excel",
+    });
+    let downLoadName = '台账';
+    let filename = downLoadName + ".xls";
+    let downloadElement = document.createElement("a");
+    let href = window.URL.createObjectURL(blob); //创建下载的链接
+    downloadElement.style.display = "none";
+    downloadElement.href = href;
+    downloadElement.download = filename; //下载后文件名
+    document.body.appendChild(downloadElement);
+    downloadElement.click(); //点击下载
+    document.body.removeChild(downloadElement); //下载完成移除元素
+    window.URL.revokeObjectURL(href); //释放掉blob对象
+})
+```
+
+### 前端无法获取到自定义响应头
+
+客户端默认只能获取以下响应头信息
+
+* Cache-Control
+* Content-language
+* Content-Type
+* Expires
+* Last-Modified
+* Pragma
+
+想要客户端可以获取到自定义响应头, 需要在响应头中添加 ``Access-Contorl-Expose-Headers : '响应头名称'``
+
+### table-cell内容元素设置百分比高度不生效
+
+背景: 想要改变某个table-cell内部的元素的布局又不想改变某个table-cell元素本身的样式, 那就需要在这个table-cell内部增加一层div作为填充, 改变这个div内部的元素的布局就相当于改变了table-cell内部元素的布局了. 
+
+需要给table增加一个固定高度,height: 1px;
+
+为什么是1px呢?因为这个固定高度要尽可能地小, 这样才不会导致table高度超出其内容本来具有的高度.
+
+### 不占用css文档流空间的'边框'
+
+我们使用大批量元素并且给这些元素增加边框时, 这些累加起来的边框会占用一定的css文档流空间, 会在某些场景下影响我们的布局, 使用box-shadow属性可以实现不占用文档流空间的假的边框效果.
+
+### 正则表达式判断路径
+
+文件路径有两种风格
+1. windows: \node_modules\mapbox-gl\
+2. unix: /node_modules/mapbox-gl/
+
+所以比较通用的路径正则匹配应该是这样
+
+``/[\\/]node_modules[\\/]mapbox-gl/``
