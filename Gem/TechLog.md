@@ -522,9 +522,10 @@ function initialization(params){
 #### 常见问题
 
 1. 为啥递归调用setTimeOut不会造成js栈溢出呢?
+经过测试确实不会栈溢出, 很有意思
 因为setTimeOut回调函数不用栈存储,是事件机制队列控制的
-2. 内存泄漏的问题
-我们使用一个变量来存放timer,在每一帧给timer附上新的定时器, 
+1. 内存泄漏的问题
+我们使用一个变量来存放timer,在每一帧给timer附上新的定时器, 在react应用中, 这个timer可以用ref来存放
 
 ### 前端下载文件
 
@@ -595,3 +596,21 @@ axiosFn.createAxios(axiosFn.getToken()).get(dataUrl + '/order/excel/export', {
 所以比较通用的路径正则匹配应该是这样
 
 ``/[\\/]node_modules[\\/]mapbox-gl/``
+
+### 如何调整GeoJsonLayer的视觉层级
+
+创建mapPane 设置mapPane容器的zIndex , 再将geoJsonLayer添加到mapPane中
+
+### promise 注意事项
+
+```js
+let pro = new Promise(resolve=>{resolve()}) //pro=>fullfilled
+let pro1 = new Promise(resolve=>{return}) //pro1=>pending
+无论pro1.then做什么 pro1永远处于pending状态
+
+```
+
+### redux abstract
+
+You can think of a reducer as an event listener which handles events based on the received action (event) type.
+ ref: [redux core concept snippet ](https://redux.js.org/tutorials/fundamentals/part-2-concepts-data-flow#reducers)
