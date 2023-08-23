@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { findDOMNode } from "react-dom";
 // simple hook for draggble dom
 // TODO: add the dragable extent to prevent dragged dom run outside container or screen
 function useDragDOM(option = { hasHandler: true }) {
@@ -7,8 +6,8 @@ function useDragDOM(option = { hasHandler: true }) {
   const dragHandlerRef = useRef();
   const draggedDomRef = useRef();
   useEffect(() => {
-    let handler = findDOMNode(dragHandlerRef.current);
-    let wrapperDom = findDOMNode(draggedDomRef.current);
+    let handler = dragHandlerRef.current;
+    let wrapperDom = draggedDomRef.current;
     if (false === hasHandler) {
       handler = wrapperDom;
     }
