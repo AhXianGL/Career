@@ -33,11 +33,10 @@ leaflet白线问题总结
 
 微前端 qiankun
 
-实现flex容器中的元素的高度不占满flex主轴的高度,并且不影响用户与flex容器下方的Dom交互,应该如何实现?
+实现flex容器中的元素的高度不占满flex主轴的高度,并且不影响用户与flex容器子Dom交互,应该如何实现?
 举例
 flex item max-height属性不生效,给每个flex-item套一个高度为0的div后max-height生效了,
-flex-item 的flex-basis属性也可以生效但是无法达到flex容器高度为0,不妨碍鼠标点击flex容器
-下方的dom的效果
+flex-item 的flex-basis属性也可以生效但是无法达到flex容器高度为0,不妨碍鼠标点击flex容器内部的dom的效果
 
 css换行的'css逻辑'(css specification中写的逻辑)
 
@@ -66,3 +65,8 @@ leaflet 源码解析合集 从自定义面向对象系统的实现 到 图层逻
 rollup 打包demo
 gulp cmd task runner demo
 
+React 的 findDomNode是干嘛的
+parentNode和parentElement有啥区别
+
+dom在其容器内部transfrom, 用js去修改translateX translateY 当容器的overflow不是hidden的时候,
+translateX translateY的计算发生异常
