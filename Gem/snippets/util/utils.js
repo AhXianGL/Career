@@ -151,3 +151,7 @@ function _override(target,...sources){
   }
   return target;
 }
+
+function getBoundsFromGeometry(){
+  
+}
