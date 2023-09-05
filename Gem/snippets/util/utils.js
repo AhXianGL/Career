@@ -155,3 +155,11 @@ function _override(target,...sources){
 function getBoundsFromGeometry(){
   
 }
+/** analogous color map*/
+function hslCalculator(source, dataRange, colorRange) {
+  let _colorRange = colorRange || [`hsl(190,100%,50%)`, `hsl(228,100%,50%)`];
+  let min = Math.min(...dataRange);
+  let max = Math.max(...dataRange);
+  let position = (source - min) / (max - min);
+  return `hsl(${170 + (228 - 170) * position},100%,50%)`;
+}
