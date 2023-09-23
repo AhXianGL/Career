@@ -58,7 +58,17 @@ const convertGeometryCoordinatesToRectExtend = (geometry) => {
   let coordinates = geoJSON.coordinates[0]
   return convertCoordinatesToExtendCorner(coordinates)
 }
-
+const getBoundsFromGeoJSON = (geojson)=>{
+  if(typeof geojson === 'string'){
+    geojson = JSON.parse(geojson);
+  }
+  let minLn = Math.min(...geojson.coordinates[0].map(point => { return point[0] }))
+  let minLat = Math.min(...geojson.coordinates[0].map(point => { return point[1] }))
+  let maxLn = Math.max(...geojson.coordinates[0].map(point => { return point[0] }))
+  let maxLat = Math.max(...geojson.coordinates[0].map(point => { return point[1] }))
+  let latLngBounds = new L.LatLngBounds([minLat, minLn], [maxLat, maxLn]);
+  return latLngBounds
+}
 /**递归, 按照原型链模式设计的 dataRef=>parentDataRef 将当前用户所在的节点映射为'路径'数组,用于生成面包屑 
  * nodeData Example:
  * {
@@ -156,8 +166,8 @@ function getBoundsFromGeometry() {
 
 }
 /** analogous color map*/
-function hslCalculator(source, dataRange, colorRange) {
-  let _colorRange = colorRange || [`hsl(190,100%,50%)`, `hsl(228,100%,50%)`];
+function hslCalculator(source, dataRange, colorRange=[`hsl(190,100%,50%)`, `hsl(228,100%,50%)`]) {
+  let _colorRange = colorRange
   let min = Math.min(...dataRange);
   let max = Math.max(...dataRange);
   let position = (source - min) / (max - min);
