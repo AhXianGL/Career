@@ -135,33 +135,36 @@ Object.defineProperty(Array.prototype, -1, {
 })
 
 /**删去sources 与 target属性的交集 */
-function _substract(target, ...sources){
+function _substract(target, ...sources) {
   for (const source of sources) {
-      for( let key in source){
-          if(key in target){
-              delete target[key];
-          }
+    for (let key in source) {
+      if (key in target) {
+        delete target[key];
       }
+    }
   }
   return target;
 }
-let a1 = {name: 'a'};
-let b1 = {name: 'b', prop:'do something'};
-let c1 = _substract(a1,b1);
+let a1 = { name: 'a' };
+let b1 = { name: 'b', prop: 'do something' };
+let c1 = _substract(a1, b1);
 console.log(c1);
 /**使用sources对象仅复写target中存在的属性 */
-function _override(target,...sources){
+function _override(target, ...sources) {
   for (const source of sources) {
-      for (const key in source) {
-          console.log(key, target)
-          if(key in target){
-              target[key] = source[key];
-          }
+    for (const key in source) {
+      console.log(key, target)
+      if (key in target) {
+        target[key] = source[key];
       }
+    }
   }
   return target;
 }
 
+function getBoundsFromGeometry() {
+
+}
 /** analogous color map*/
 function hslCalculator(source, dataRange, colorRange=[`hsl(190,100%,50%)`, `hsl(228,100%,50%)`]) {
   let _colorRange = colorRange
@@ -169,4 +172,10 @@ function hslCalculator(source, dataRange, colorRange=[`hsl(190,100%,50%)`, `hsl(
   let max = Math.max(...dataRange);
   let position = (source - min) / (max - min);
   return `hsl(${170 + (228 - 170) * position},100%,50%)`;
+}
+/**keep some  */
+function toFixed(number, precise) {
+  let number = 3.1415926;
+  number = Number(number.toString().match(`/^\d+(?:\.\d{0,${precise}})?/`));
+  console.log(number);// 3.14
 }
